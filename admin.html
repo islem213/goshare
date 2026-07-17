@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>GoShare DZ - Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dash.html">
+                <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-car"></i></div>
+                <div class="sidebar-brand-text mx-3">GoShare <sup>DZ</sup></div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item"><a class="nav-link" href="dash.html"><i class="fas fa-fw fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="find.html"><i class="fas fa-fw fa-search"></i><span>Find a Ride</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="offer.html"><i class="fas fa-fw fa-plus"></i><span>Offer a Ride</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="my-trips.html"><i class="fas fa-fw fa-list"></i><span>My Trips</span></a></li>
+        </ul>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <div class="container-fluid mt-4">
+                    <h1 class="h3 mb-4 text-gray-800">Admin Dashboard - Manage Trips</h1>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Route</th>
+                                            <th>Driver</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-table-body">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script>
+        async function checkAdminAccess() {
+            // 1. Get the current user session
+            const { data: { user }, error } = await window.supabaseClient.auth.getUser();
+
+            // 2. Check if user exists and if the email matches exactly
+            if (!user || user.email !== 'admin@ech7enli.com') {
+                alert("Accès refusé. Vous n'êtes pas l'administrateur.");
+                window.location.href = 'dash.html'; // Redirect unauthorized users
+                return;
+            }
+
+            // 3. If they are the admin, proceed to load the data
+            fetchAllTrips();
+        }
+
+        async function fetchAllTrips() {
+            const { data, error } = await window.supabaseClient.from('trips').select('*');
+            const body = document.getElementById('admin-table-body');
+            
+            if (error) {
+                body.innerHTML = "Erreur lors du chargement des données.";
+                return;
+            }
+
+            body.innerHTML = data.map(t => `
+                <tr ${t.is_featured ? 'style="background-color: #fff9e6;"' : ''}>
+                    <td>${starIcon(t.is_featured)}${t.origin} ➔ ${t.destination}</td>
+                    <td>${t.driver_name}</td>
+                    <td>${t.phone_number}</td>
+                    <td>${t.is_featured ? '<span class="badge badge-warning">Featured</span>' : '<span class="badge badge-secondary">Normal</span>'}</td>
+                    <td>
+                        <button onclick="toggleFeature('${t.id}', ${t.is_featured})" class="btn btn-info btn-sm">
+                            <i class="fas fa-star"></i> ${t.is_featured ? 'Unpromote' : 'Promote'}
+                        </button>
+                        <button onclick="deleteTrip('${t.id}')" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function starIcon(isFeatured) {
+            return isFeatured ? '<i class="fas fa-star text-warning mr-2"></i>' : '';
+        }
+
+        async function toggleFeature(id, currentStatus) {
+            const { error } = await window.supabaseClient
+                .from('trips')
+                .update({ is_featured: !currentStatus })
+                .eq('id', id);
+            
+            if (!error) fetchAllTrips();
+        }
+
+        async function deleteTrip(id) {
+            if(confirm("Are you sure?")) {
+                const { error } = await window.supabaseClient
+                    .from('trips')
+                    .delete()
+                    .eq('id', id);
+                
+                if (!error) fetchAllTrips();
+            }
+        }
+
+        // Run the security check immediately on load
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+
+    </script>
+</body>
+</html>

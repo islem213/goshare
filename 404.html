@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>GoShare DZ - 404 Page Not Found</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/startbootstrap-sb-admin-2@4.1.4/css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .mobile-nav .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #858796;
+            text-decoration: none;
+        }
+        .mobile-nav .nav-link i { font-size: 1.1rem; margin-bottom: 2px; }
+        .mobile-nav .nav-link:active { color: #1cc88a; }
+        
+        /* Hide sidebar toggle on mobile to clean up space */
+        @media (max-width: 768px) {
+            #accordionSidebar { display: none; } 
+            body { padding-bottom: 70px; } /* Space for the bottom bar */
+        }
+    </style>
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dash.html">
+                <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-car"></i></div>
+                <div class="sidebar-brand-text mx-3">GoShare <sup>DZ</sup></div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item"><a class="nav-link" href="dash.html"><i class="fas fa-fw fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="find.html"><i class="fas fa-fw fa-search"></i><span>Find a Ride</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="offer.html"><i class="fas fa-fw fa-plus"></i><span>Offer a Ride</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="my-trips.html"><i class="fas fa-fw fa-list"></i><span>My Trips</span></a></li>
+        </ul>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="userDropdownSpan">Guest</span>
+                        </li>
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="javascript:void(0);" onclick="logout()">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="container-fluid">
+                    <div class="text-center mt-5">
+                        <div class="error mx-auto" data-text="404">404</div>
+                        <p class="lead text-gray-800 mb-5">Page Not Found</p>
+                        <p class="text-gray-500 mb-0">It looks like you found a glitch in the matrix...</p>
+                        <a href="dash.html" class="text-success font-weight-bold">&larr; Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; GoShare DZ 2026</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <nav class="mobile-nav d-md-none">
+        <a href="dash.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="find.html" class="nav-link">
+            <i class="fas fa-search"></i>
+            <span>Find</span>
+        </a>
+        <a href="offer.html" class="nav-link">
+            <i class="fas fa-plus-circle" style="font-size: 1.5rem; color: #1cc88a;"></i>
+            <span>Post</span>
+        </a>
+        <a href="my-trips.html" class="nav-link">
+            <i class="fas fa-car"></i>
+            <span>My Trips</span>
+        </a>
+    </nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script>
+        // Check session to update topbar, but don't force redirect 
+        // because we want guests to see the error too.
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                document.getElementById('userDisplay').textContent = user.email;
+            }
+        });
+    </script>
+</body>
+</html>
