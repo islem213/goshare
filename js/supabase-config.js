@@ -2,8 +2,8 @@
 
 // Prevent redeclaration errors
 if (typeof supabaseClient === 'undefined') {
-    const SUPABASE_URL = 'https://oeuwnqcogjeoynsxanjg.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ldXducWNvZ2plb3luc3hhbmpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc1NTgsImV4cCI6MjA4NTYxMzU1OH0.NHawH5upc28aN661ry69VIAmpNLly5oixQjYDSeNPSw';
+    const SUPABASE_URL = '#';
+    const SUPABASE_KEY = '#';
     
     // Use a unique name like 'supabaseClient' instead of just 'supabase'
     window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
