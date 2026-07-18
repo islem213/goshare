@@ -117,9 +117,9 @@ Trip completed
 ## Phase 1 — MVP
 
 - [x] Project Planning
-- [ ] Authentication
-- [ ] Publish Trip
-- [ ] Search Trips
+- [X] Authentication
+- [X] Publish Trip
+- [X] Search Trips
 - [ ] Booking System
 - [ ] Ratings
 
